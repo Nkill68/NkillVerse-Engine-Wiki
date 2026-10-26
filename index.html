@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<!-- saved from url=(0100)file:///C:/Users/Utente/Desktop/Nuova%20cartella%20(5)/n_slice_lua_scene3d_docs_red_black_white.html -->
+<html lang="en"><head><meta content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>MidNight Engine — Lua &amp; 3D API</title>
+<style>
+:root{
+  --bg:#501919;--panel:#5c2626;--panel2:#6b2525;--line:#803939;--text:#e8ecf4;
+  --muted:#9aa5b8;--accent:#8b9cff;--accent2:#b4bdff;--green:#91d7b1;--orange:#f0c68a;
+  --code:#090c12;--shadow:0 12px 35px #0005;--radius:15px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:radial-gradient(ellipse at 10% 0%,#1a2034 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--accent2);text-decoration:none}
+a:hover{color:#fff}
+button,input{font:inherit}
+button{cursor:pointer}
+.layout{display:grid;grid-template-columns:275px minmax(0,1fr);min-height:100vh}
+.sidebar{height:100vh;position:sticky;top:0;overflow:auto;border-right:1px solid var(--line);background:#0d1017eF;padding:24px 16px}
+.brand{display:flex;gap:12px;align-items:center;margin:0 8px 22px}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#9daaff,#5d6dd7);color:#101425;font-weight:900;font-size:17px;box-shadow:0 7px 24px #6676df40}
+.brand h1{font-size:15px;line-height:1.25;margin:0;letter-spacing:.02em}
+.brand p{font-size:11px;color:var(--muted);margin:4px 0 0}
+.search-wrap{position:relative;margin:0 4px 20px}
+.search-wrap input{width:100%;padding:11px 12px 11px 36px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);outline:none}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-icon{position:absolute;left:12px;top:9px;color:var(--muted)}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#000000;font-weight:800;padding:12px 10px 5px}
+nav a{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;margin:2px 0;border-radius:9px;color:#b8c1d2;font-size:13px}
+nav a:hover,nav a.active{background:#20273a;color:#fff}
+nav a .count{font-size:10px;color:#000000}
+.sidebar-foot{border-top:1px solid var(--line);margin-top:22px;padding:15px 9px;color:#758198;font-size:11px}
+main{min-width:0;max-width:1120px;width:100%;padding:48px clamp(22px,5vw,72px) 90px;margin:0 auto}
+.hero{padding:34px;border:1px solid #343c55;border-radius:22px;background:linear-gradient(135deg,#1a2031,#11151e 65%);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:230px;height:230px;border:1px solid #7f8cff20;border-radius:50%;right:-80px;top:-100px;box-shadow:0 0 0 25px #7f8cff08,0 0 0 55px #7f8cff05}
+.eyebrow{color:var(--accent2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.16em}
+.hero h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.04em;line-height:1.1;margin:12px 0}
+.hero p{color:#aeb8ca;max-width:650px;margin:0}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #384158;background:#171d2b;padding:5px 9px;border-radius:999px;color:#cbd3e4;font-size:11px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 46px}
+.stat{border:1px solid var(--line);border-radius:13px;padding:15px 17px;background:#10141c}
+.stat strong{display:block;font-size:22px;letter-spacing:-.03em}
+.stat span{font-size:11px;color:var(--muted)}
+.intro-note{border-left:3px solid var(--orange);background:#201c17;padding:13px 16px;border-radius:0 10px 10px 0;color:#d7c6ab;font-size:13px;margin:18px 0 42px}
+.category{margin:46px 0 0}
+.category-head{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--line);padding-bottom:17px;margin-bottom:18px}
+.category-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid #3a4260;border-radius:12px;background:#1b2132;color:var(--accent2);font-weight:800}
+.category h2{font-size:24px;letter-spacing:-.025em;margin:0 0 3px}
+.category-head p{margin:0;color:var(--muted);font-size:13px}
+.function-list{display:grid;gap:11px}
+.function{border:1px solid var(--line);border-radius:13px;background:linear-gradient(135deg,#131823,#10131b);overflow:hidden}
+.function summary{list-style:none;cursor:pointer;padding:15px 17px;display:flex;align-items:center;gap:12px}
+.function summary::-webkit-details-marker{display:none}
+.function summary:after{content:"+";margin-left:auto;color:#ff0000;font-size:20px;font-weight:300}
+.function[open] summary:after{content:"−"}
+.fn-name{font:600 14px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#000000;overflow-wrap:anywhere}
+.fn-short{color:var(--muted);font-size:12px;margin-top:2px}
+.fn-body{border-top:1px solid var(--line);padding:18px}
+.fn-body p{margin:0 0 12px;color:#c3cbda}
+.fn-body h4{margin:18px 0 7px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8996b0}
+.fn-body h4:first-child{margin-top:0}
+.signature{position:relative;background:var(--code);border:1px solid #252c3a;border-radius:9px;padding:13px 92px 13px 14px;overflow:auto;color:#c6d3ff;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.copy{position:absolute;right:8px;top:8px;border:1px solid #333c4d;background:#171d29;color:#aeb9d1;border-radius:7px;font-size:10px;padding:5px 8px}
+.copy:hover{border-color:var(--accent);color:#fff}
+.params{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 14px}
+.params th{text-align:left;color:#8794ac;font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.params td,.params th{padding:9px 8px;border-bottom:1px solid #252b38;vertical-align:top}
+.params td:first-child{font:12px ui-monospace,SFMono-Regular,Consolas,monospace;color:#b9c5ff;white-space:nowrap}
+.params td:nth-child(2){color:#9cd8b6;white-space:nowrap}
+.params td:last-child{color:#aeb8ca}
+.example{position:relative}
+.example pre{margin:0;background:#080b11;border:1px solid #252c3a;border-radius:9px;padding:14px;overflow:auto;color:#cdd5e8;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
+.kw{color:#c4a7ff}.str{color:#a4d7ad}.num{color:#f0c68a}.comment{color:#71809b}
+.tag{display:inline-block;padding:2px 6px;border-radius:5px;background:#20283a;color:#b8c5ff;font-size:10px;margin-left:7px;vertical-align:2px}
+.empty{display:none;color:var(--muted);padding:20px}
+footer{border-top:1px solid var(--line);margin-top:60px;padding-top:20px;color:#77839a;font-size:12px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;color:#8a96ac;font-size:12px}
+.mobile-menu{display:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:8px 10px;border-radius:8px}
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ .sidebar{height:auto;position:relative;border-right:0;border-bottom:1px solid var(--line);padding:15px}
+ .brand{margin-bottom:12px}
+ nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .nav-label{grid-column:1/-1}
+ .sidebar-foot{display:none}
+ main{padding:25px 17px 60px}
+ .hero{padding:24px}
+ .stats{margin-bottom:28px}
+}
+@media(max-width:500px){.stats{grid-template-columns:1fr}.params td:first-child{white-space:normal}.category h2{font-size:21px}.function summary{padding:13px}.fn-body{padding:14px}}
+@media print{.sidebar,.copy{display:none}.layout{display:block}main{max-width:none;padding:0}.function{break-inside:avoid}.function:not([open])>.fn-body{display:block}body{background:#fff;color:#111}.hero,.stat,.function{background:#fff;color:#111;box-shadow:none}.fn-name,.signature,.example pre{color:#111}}
+
+/* Stile documentazione: piatto, compatto e con decorazioni ridotte */
+:root{
+  --bg:#101214;--panel:#171a1e;--panel2:#1c2025;--line:#30353b;--text:#e1e4e8;
+  --muted:#a0a7b0;--accent:#91a7c7;--accent2:#b7c9e2;--green:#a7cbb3;--orange:#d9bd8f;
+  --code:#0b0d0f;--shadow:none;--radius:5px
+}
+body{background:var(--bg);font-size:14px;line-height:1.6}
+.sidebar{background:#141619;border-right-color:#2a2e33}
+.brand-mark{border-radius:5px;background:#303b4a;color:#e2e8f1;box-shadow:none}
+.brand h1{font-size:14px}
+.search-wrap input{border-radius:4px;background:#0f1113}
+nav a{border-radius:3px}
+nav a:hover,nav a.active{background:#252a30;color:#f2f4f7}
+main{max-width:1050px;padding-top:34px}
+.hero{border:1px solid var(--line);border-radius:5px;background:#171a1e;box-shadow:none;padding:27px}
+.hero:after{display:none}
+.eyebrow{letter-spacing:.08em;color:#9eb0c8}
+.hero h2{font-size:34px;letter-spacing:-.025em;margin:8px 0 10px}
+.hero p{color:#b4bbc4}
+.hero-tags{display:none}
+.stats{gap:10px;margin:14px 0 34px}
+.stat{border-radius:4px;padding:12px 14px;background:#15181b}
+.stat strong{font-size:18px}
+.stat span{font-size:11px}
+.intro-note{border-radius:0;background:#211f1a;border-left-color:#b99d70}
+.category{margin-top:37px}
+.category-head{gap:12px;padding-bottom:13px;margin-bottom:14px}
+.category-icon{border-radius:4px;background:#1b2026;border-color:#363d46;color:#000000;width:34px;height:34px;flex-basis:34px;font-size:12px}
+.category h2{font-size:21px;letter-spacing:-.015em}
+.category-head p{font-size:12px}
+.function-list{gap:7px}
+.function{border-radius:4px;background:#15181b}
+.function summary{padding:11px 13px;gap:10px}
+.function summary:after{font-size:17px}
+.fn-name{font-size:13px;color:#000000}
+.fn-short{font-size:11px}
+.fn-body{padding:14px;border-top-color:#2a2f35}
+.fn-body p{color:#c0c6ce;font-size:13px}
+.fn-body h4{margin:15px 0 6px;font-size:10px;color:#000000}
+.signature,.example pre{border-radius:4px;border-color:#2a2f35}
+.signature{padding:11px 76px 11px 11px;font-size:12px}
+.copy{border-radius:3px;background:#1a1e23;border-color:#3a414a}
+.params{font-size:11px}
+.params td,.params th{padding:7px 6px}
+.params td:first-child{color:#c0cce0}
+.tag,.pill{border-radius:3px}
+footer{margin-top:45px}
+@media(max-width:850px){
+  .sidebar{padding:13px}
+  .hero{padding:21px}
+  .hero h2{font-size:29px}
+  main{padding-top:22px}
+}
+
+
+/* Stile documentazione: piatto, compatto e con decorazioni ridotte */
+:root{
+  --bg:#101214;--panel:#171a1e;--panel2:#1c2025;--line:#30353b;--text:#e1e4e8;
+  --muted:#a0a7b0;--accent:#91a7c7;--accent2:#b7c9e2;--green:#a7cbb3;--orange:#d9bd8f;
+  --code:#0b0d0f;--shadow:none;--radius:5px
+}
+body{background:var(--bg);font-size:14px;line-height:1.6}
+.sidebar{background:#141619;border-right-color:#2a2e33}
+.brand-mark{border-radius:5px;background:#303b4a;color:#e2e8f1;box-shadow:none}
+.brand h1{font-size:14px}
+.search-wrap input{border-radius:4px;background:#0f1113}
+nav a{border-radius:3px}
+nav a:hover,nav a.active{background:#252a30;color:#f2f4f7}
+main{max-width:1050px;padding-top:34px}
+.hero{border:1px solid var(--line);border-radius:5px;background:#171a1e;box-shadow:none;padding:27px}
+.hero:after{display:none}
+.eyebrow{letter-spacing:.08em;color:#9eb0c8}
+.hero h2{font-size:34px;letter-spacing:-.025em;margin:8px 0 10px}
+.hero p{color:#b4bbc4}
+.hero-tags{display:none}
+.stats{gap:10px;margin:14px 0 34px}
+.stat{border-radius:4px;padding:12px 14px;background:#15181b}
+.stat strong{font-size:18px}
+.stat span{font-size:11px}
+.intro-note{border-radius:0;background:#211f1a;border-left-color:#b99d70}
+.category{margin-top:37px}
+.category-head{gap:12px;padding-bottom:13px;margin-bottom:14px}
+.category-icon{border-radius:4px;background:#1b2026;border-color:#363d46;color:#c0cce0;width:34px;height:34px;flex-basis:34px;font-size:12px}
+.category h2{font-size:21px;letter-spacing:-.015em}
+.category-head p{font-size:12px}
+.function-list{gap:7px}
+.function{border-radius:4px;background:#15181b}
+.function summary{padding:11px 13px;gap:10px}
+.function summary:after{font-size:17px}
+.fn-name{font-size:13px;color:#000000}
+.fn-short{font-size:11px}
+.fn-body{padding:14px;border-top-color:#2a2f35}
+.fn-body p{color:#c0c6ce;font-size:13px}
+.fn-body h4{margin:15px 0 6px;font-size:10px;color:#a2acb8}
+.signature,.example pre{border-radius:4px;border-color:#2a2f35}
+.signature{padding:11px 76px 11px 11px;font-size:12px}
+.copy{border-radius:3px;background:#1a1e23;border-color:#3a414a}
+.params{font-size:11px}
+.params td,.params th{padding:7px 6px}
+.params td:first-child{color:#c0cce0}
+.tag,.pill{border-radius:3px}
+footer{margin-top:45px}
+@media(max-width:850px){
+  .sidebar{padding:13px}
+  .hero{padding:21px}
+  .hero h2{font-size:29px}
+  main{padding-top:22px}
+}
+
+</style>
+
+<style id="red-black-white-theme">
+
+/* Tema essenziale: solo rosso, nero e bianco */
+:root {
+  color-scheme: light;
+  --red: #ff0000;
+  --black: #000000;
+  --white: #ffffff;
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --text: #000000;
+  --muted: #000000;
+  --line: #000000;
+  --accent: #ff0000;
+}
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font: 14px Arial, Helvetica, sans-serif !important;
+  line-height: 1.55;
+}
+* { box-shadow: none !important; text-shadow: none !important; }
+a { color: #ff0000 !important; }
+header, .hero, .topbar {
+  background: #ff0000 !important;
+  color: #ffffff !important;
+  border: 0 !important;
+}
+header *, .hero *, .topbar * { color: #ffffff !important; }
+h1, h2, h3, h4, .section-title { color: #ff0000 !important; }
+.layout, .app, .docs-layout {
+  gap: 12px !important;
+}
+aside, .sidebar, nav {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+}
+aside *, .sidebar *, nav * { color: #ffffff !important; }
+nav a, .nav a, .sidebar a {
+  display: block;
+  padding: 6px 8px;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+}
+nav a:hover, .nav a:hover, .sidebar a:hover {
+  background: #ff0000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+section, .section, .card, .function-card, .api-card, .panel,
+details, .function, .api-function {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+}
+p, li, td, dd, dt, label, summary, small, .description, .muted {
+  color: #000000 !important;
+}
+input, textarea, select {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+  font: inherit;
+}
+button, .button, [role="button"] {
+  background: #ff0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+button *, .button * { color: #ffffff !important; }
+button:hover, .button:hover, [role="button"]:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+code, pre, .signature, .code, .code-block, pre code {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-left: 3px solid #ff0000 !important;
+  border-radius: 0 !important;
+  font-family: Consolas, "Courier New", monospace !important;
+}
+.badge, .tag, .pill {
+  display: inline-block;
+  background: #ff0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+  padding: 2px 6px;
+}
+table { border-collapse: collapse; background: #ffffff !important; }
+th { background: #ff0000 !important; color: #ffffff !important; }
+td, th { border: 1px solid #000000 !important; padding: 6px 8px; }
+tr:nth-child(even) td { background: #ffffff !important; }
+hr { border: 0; border-top: 1px solid #000000; }
+footer { background: #000000 !important; color: #ffffff !important; }
+footer * { color: #ffffff !important; }
+::selection { background: #ff0000; color: #ffffff; }
+@media (max-width: 800px) {
+  .layout, .app, .docs-layout { grid-template-columns: 1fr !important; }
+}
+
+</style>
+</head>
+<body>
+<div class="layout" lang="en">
+<aside class="sidebar">
+<div class="brand">
+<div class="brand-mark">MNE</div>
+<h1>MidNight Engine</h1>
+</div>
+<div class="search-wrap"><span class="search-icon">⌕</span><input aria-label="Search for a function" id="search" placeholder="Search for a function…" type="search"/></div>
+<nav id="navigation">
+<div class="nav-label">Overview</div>
+<a href="#intro">Introduction</a>
+<div class="nav-label">Custom Lua States</div>
+<a href="#lua-sprites">Sprites and animations</a>
+<a href="#lua-transform">Transformations</a>
+<a href="#lua-input">Input</a>
+<a href="#lua-state">State and property</a>
+<div class="nav-label">Scene3D</div>
+<a href="#objects">3D objects</a>
+<a href="#transforms">3D Transformations</a>
+<a href="#materials">Materials and textures</a>
+<a href="#lights">Lights</a>
+<a href="#camera">Camera</a>
+<a href="#sky">Sky and atmosphere</a>
+<a href="#render">Rendering e ombre</a>
+<a href="#post">Post-processing</a>
+<a href="#reflections">Reflections and water</a>
+<a href="#bindings">Sprite binding</a>
+<a href="#diagnostics">Diagnostics</a>
+</nav>
+</aside>
+<main>
+<div class="topline"><span>ENGINE WIKI</span><h2>!!!still WIP soo there could be some sintax errors!!!</h2></div>
+<section class="hero" id="overview">
+<h2>MidNight Engine Functions</h2>
+</section>
+<section class="category" data-category="Custom Lua States" id="lua-sprites">
+<div class="category-head"><div class="category-icon">☺</div><div><h2>Sprites and animations</h2><p>Creating, adding, and managing sprites in a Custom Lua State.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">makeLuaSprite(tag, image, x, y)</div><div class="fn-short">Creates a sprite and registers it with a tag.</div></div></summary><div class="fn-body">
+<p>Create a sprite using the assets in the current state. First, search for a Sparrow atlas, and if it's not available, try loading a regular image. Creating a sprite doesn't automatically add it to the state.</p>
+<h4>Syntax</h4><div class="signature">makeLuaSprite(tag, image, x = 0, y = 0)</div>
+<h4>Parameters</h4><table class="params"><tbody><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td>tag</td><td>string</td><td>Unique identifier of the sprite.</td></tr><tr><td>image</td><td>string</td><td>Asset name/path relative to <code>states_assets/&lt;stateName&gt;/</code>.</td></tr><tr><td>x, y</td><td>number</td><td>Initial position, default 0.</td></tr></tbody></table>
+<h4>Example</h4><div class="example"><pre>makeLuaSprite("logo", "logo", 320, 180)
+addLuaSprite("logo")</pre><button class="copy" data-copy="">Copy</button></div>
+</div></details>
+<details class="function"><summary><div><div class="fn-name">addLuaSprite(tag)</div><div class="fn-short">Adds a previously created sprite to the state.</div></div></summary><div class="fn-body"><p>Adds the registered sprite with the specified tag to the scene. Tags ending with <code>-Hook</code>are ignored.</p><h4>Syntax</h4><div class="signature">addLuaSprite(tag)</div><h4>Parameters</h4><table class="params"><tbody><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td>tag</td><td>string</td><td>Tag of the previously created sprite.</td></tr></tbody></table><h4>Example</h4><div class="example"><pre>makeLuaSprite("background", "bg", 0, 0)
+addLuaSprite("background")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">removeLuaSprite(tag)</div><div class="fn-short">Removes and destroys a registered sprite.</div></div></summary><div class="fn-body"><p>Removes the sprite from the state and clears the associated tag. Tags with suffixes <code>-Hook</code>are ignored.</p><h4>Syntax</h4><div class="signature">removeLuaSprite(tag)</div><h4>Example</h4><div class="example"><pre>removeLuaSprite("logo")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">addAnimationByPrefix(tag, animname, animxmlname, fps, looped, flipx, flipy)</div><div class="fn-short">Record an animation using the atlas prefix.</div></div></summary><div class="fn-body"><p>Adds an animation to the sprite using the frame prefix in the atlas.</p><h4>Syntax</h4><div class="signature">addAnimationByPrefix(tag, animname, animxmlname, fps = 24, looped = false, flipx = false, flipy = false)</div><h4>Parameters</h4><table class="params"><tbody><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td>tag</td><td>string</td><td>Sprite tag.</td></tr><tr><td>six names</td><td>string</td><td>Name to record the animation under.</td></tr><tr><td>animxmlname</td><td>string</td><td>Frame prefix in the atlas.</td></tr><tr><td>fps</td><td>number</td><td>Frame rate in frames per second, default 24.</td></tr><tr><td>looped</td><td>boolean</td><td>If the animation needs to repeat.</td></tr><tr><td>flipx, flipy</td><td>boolean</td><td>Flips the animation on the X/Y axes.</td></tr></tbody></table><h4>Example</h4><div class="example"><pre>addAnimationByPrefix("logo", "idle", "logo idle", 24, true)
+playAnim("logo", "idle")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">playAnim(tag, animname)</div><div class="fn-short">Play a recorded animation.</div></div></summary><div class="fn-body"><p>Set the animation identified by as the current one <code>animname</code>.</p><h4>Syntax</h4><div class="signature">playAnim(tag, animname)</div><h4>Example</h4><div class="example"><pre>playAnim("logo", "idle")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">removeAnimationPrefix(tag, animname)</div><div class="fn-short">Removes an animation associated with the sprite.</div></div></summary><div class="fn-body"><p>Removes the indicated animation from the sprite's animation log.</p><h4>Syntax</h4><div class="signature">removeAnimationPrefix(tag, animname)</div><h4>Example</h4><div class="example"><pre>removeAnimationPrefix("logo", "idle")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+</div>
+</section>
+<section class="category" data-category="Custom Lua States" id="lua-transform">
+<div class="category-head"><div class="category-icon">◄↕►</div><div><h2>Transformations and visibility</h2><p>Common controls for sprite position, scale, and rendering.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">setPosition(tag, x, y)</div><div class="fn-short">Sets the position of the sprite.</div></div></summary><div class="fn-body"><div class="signature">setPosition(tag, x, y)</div><p>Sets the X and Y coordinates of the sprite identified by the tag.</p><h4>Example</h4><div class="example"><pre>setPosition("logo", 400, 200)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">setScrollFactor(tag, x, y)</div><div class="fn-short">Sets the camera's scroll factor.</div></div></summary><div class="fn-body"><div class="signature">setScrollFactor(tag, x, y)</div><p>Controls how closely the sprite follows the camera's scrolling along the two axes.</p><h4>Example</h4><div class="example"><pre>setScrollFactor("background", 0.5, 0.5)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">setObjectScale(tag, x, y)</div><div class="fn-short">Sets the X/Y scale of the sprite.</div></div></summary><div class="fn-body"><div class="signature">setObjectScale(tag, x, y)</div><p>Set the horizontal and vertical scale separately.</p><h4>Example</h4><div class="example"><pre>setObjectScale("logo", 1.5, 1.5)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">setVisible(tag, value)</div><div class="fn-short">Show or hide the sprite.</div></div></summary><div class="fn-body"><div class="signature">setVisible(tag, value = true)</div><p>Sets the visibility property. If omitted, <code>value</code>it is <code>true</code>.</p><h4>Example</h4><div class="example"><pre>setVisible("logo", false)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+</div>
+</section>
+<section class="category" data-category="Custom Lua States" id="lua-input">
+<div class="category-head"><div class="category-icon">▚</div><div><h2>Input: mouse and keyboard</h2><p>Check the current state and pressure transitions of the controls.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">showMouse(show)</div><div class="fn-short">Show or hide the cursor.</div></div></summary><div class="fn-body"><div class="signature">showMouse(show = true)</div><p>Toggles the cursor display on or off.</p><div class="example"><pre>showMouse(true)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isMousePressed(button)</div><div class="fn-short">True while the mouse button is pressed.</div></div></summary><div class="fn-body"><div class="signature">isMousePressed(button = "left")</div><p>Checks whether the button is currently pressed. Supported names and the mapping of <code>middle</code>/ <code>right</code>should be checked in the wrapper, which may mix them up.</p><div class="example"><pre>if isMousePressed("left") then
+    trace("Mouse pressed")
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isMouseJustPressed(button)</div><div class="fn-short">True only in the frame in which it is pressed.</div></div></summary><div class="fn-body"><div class="signature">isMouseJustPressed(button = "left")</div><p>Returns true only in the initial frame of the press.</p><div class="example"><pre>if isMouseJustPressed("left") then
+    trace("Click")
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isMouseJustReleased(button)</div><div class="fn-short">True only in the frame in which it is released.</div></div></summary><div class="fn-body"><div class="signature">isMouseJustReleased(button = "left")</div><p>Detect the frame where the button transitions from pressed to released.</p><div class="example"><pre>if isMouseJustReleased("left") then
+    trace("Release")
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isKeyPressed(name)</div><div class="fn-short">True while the key is pressed.</div></div></summary><div class="fn-body"><div class="signature">isKeyPressed(name)</div><p><code>name</code>is converted via <code>FlxKey.fromString</code>.</p><div class="example"><pre>if isKeyPressed("SPACE") then
+    trace("Space pressed")
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isKeyJustPressed(name)</div><div class="fn-short">True in the initial frame of the pressure.</div></div></summary><div class="fn-body"><div class="signature">isKeyJustPressed(name)</div><div class="example"><pre>if isKeyJustPressed("ENTER") then
+    trace("Confirmed")
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isKeyReleased(name)</div><div class="fn-short">True when the key is not pressed.</div></div></summary><div class="fn-body"><div class="signature">isKeyReleased(name)</div><p>Check the key release state.</p><div class="example"><pre>if isKeyReleased("SPACE") then
+    -- key released
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">isKeyJustReleased(name)</div><div class="fn-short">True in the frame in which the key is released.</div></div></summary><div class="fn-body"><div class="signature">isKeyJustReleased(name)</div><div class="example"><pre>if isKeyJustReleased("SPACE") then
+    trace("Space released")
+end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+</div>
+</section>
+<section class="category" data-category="Custom Lua States" id="lua-state">
+<div class="category-head"><div class="category-icon">ƒ</div><div><h2>Status, logging and ownership</h2><p>General functions for debugging, changing state, and accessing properties.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">trace(text)</div><div class="fn-short">Writes a message to the engine log.</div></div></summary><div class="fn-body"><div class="signature">trace(text)</div><p>The message is logged with a prefix that identifies the Lua file.</p><div class="example"><pre>trace("Custom state started")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">switchLuaState(name)</div><div class="fn-short">Switch to a registered state.</div></div></summary><div class="fn-body"><div class="signature">switchLuaState(name)</div><p>It can switch to a known native state or to a Custom Lua State registered in <code>data/states_names.json</code>.</p><div class="example"><pre>switchLuaState("MainMenu")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">setWindowTitle(title)</div><div class="fn-short">Change the window title.</div></div></summary><div class="fn-body"><div class="signature">setWindowTitle(title = "")</div><p>The text is stripped of leading/trailing spaces. An empty string restores the default title <code>Friday Night Funkin' MidNight Engine</code>.</p><div class="example"><pre>setWindowTitle("My Custom State")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">setProperty(path, value)</div><div class="fn-short">Sets a sprite property by path.</div></div></summary><div class="fn-body"><div class="signature">setProperty(path, value)</div><p>The first segment of the path is the sprite tag; subsequent segments identify the property via dots.</p><div class="example"><pre>setProperty("logo.alpha", 0.5)
+setProperty("logo.visible", true)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">getProperty(path)</div><div class="fn-short">Reads a property of a sprite.</div></div></summary><div class="fn-body"><div class="signature">getProperty(path)</div><p>Uses the same dot format as <code>setProperty</code>. If the path or property does not exist, returns <code>nil</code>in Lua.</p><div class="example"><pre>local alpha = getProperty("logo.alpha")
+trace(tostring(alpha))</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="objects">
+<div class="category-head">
+<div class="category-icon">3D</div>
+<div>
+<h2>3D objects and meshes</h2>
+<p>Primitives, hierarchy, mesh and transformations of three-dimensional objects.</p>
+</div>
+</div>
+<div class="function-list">
+<details class="function">
+<summary><div><div class="fn-name">add_obj(tag, type, x, y, z, sx, sy, sz)</div><div class="fn-short">Create a 3D primitive or group.</div></div></summary>
+<div class="fn-body">
+<p>The internal implementation of the primitives is provided by <code>Primitives</code>: <code>plane</code>, <code>quad</code>, <code>cube</code>, <code>sphere</code>, <code>cylinder</code>, <code>cone</code>and . The and <code>torus</code>types depend on the wrapper. Tag handling and Lua callback names are not defined by the Haxe classes described.<code>empty</code><code>group</code></p>
+<h4>Wrapper syntax</h4>
+<div class="signature">add_obj(tag, type, x = 0, y = 0, z = 0, sx = 1, sy = 1, sz = 1)</div>
+<h4>Internal primitive parameters</h4>
+<table class="params"><tbody>
+<tr><th>Primitive</th><th>Parameters</th><th>Description</th></tr>
+<tr><td>plane</td><td>w=1, d=1, segX=1, segZ=1</td><td>Divisible plan.</td></tr>
+<tr><td>quad</td><td>w=1, h=1</td><td>Quadrilateral.</td></tr>
+<tr><td>cube</td><td>sx=1, sy=1, sz=1</td><td>Cube or parallelepiped.</td></tr>
+<tr><td>sphere</td><td>radius=1, segments=32, rings=16</td><td>Sphere with radius and subdivisions.</td></tr>
+<tr><td>cylinder</td><td>radiusTop=.5, radiusBottom=.5, height=1, segments=32, capTop=true, capBottom=true</td><td>Cylinder with configurable ends.</td></tr>
+<tr><td>cone</td><td>radius=.5, height=1, segments=32</td><td>Cone obtained from a cylinder with zero upper radius.</td></tr>
+<tr><td>torus</td><td>R=1, r=.3, segments=32, tube=16</td><td>Torus with major radius R and tube radius r.</td></tr>
+</tbody></table>
+<p>The primitives use counterclockwise winding for the front face and the positive Y-axis as the upward direction.</p>
+<h4>Example</h4>
+<div class="example"><pre>add_obj("myCube", "cube", 0, 0, 0, 1, 1, 1)</pre><button class="copy" data-copy="">Copy</button></div>
+</div>
+</details>
+<details class="function">
+<summary><div><div class="fn-name">add_obj_mesh(tag, mesh, x, y, z)</div><div class="fn-short">Create an object from a 3D Mesh.</div></div></summary>
+<div class="fn-body">
+<div class="signature">add_obj_mesh(tag, mesh, x = 0, y = 0, z = 0)</div>
+<p><code>Object3D</code>can contain a <code>Mesh3D</code>and a <code>Material3D</code>. Tag registration and the initially assigned material depend on the wrapper.</p>
+</div>
+</details>
+<details class="function">
+<summary><div><div class="fn-name">add_model(tag, path, x, y, z, scale)</div><div class="fn-short">Upload a template from a file.</div></div></summary>
+<div class="fn-body">
+<div class="signature">add_model(tag, path, x = 0, y = 0, z = 0, scale = 1)</div>
+<p>Loading OBJ, glTF, and GLB models is not directly defined by the 15 basic Haxe classes listed here. Supported formats, material handling, child naming, and return values ​​must be verified in the actual loader and wrapper.</p>
+</div>
+</details>
+<details class="function">
+<summary><div><div class="fn-name">remove_obj(tag)</div><div class="fn-short">Removes an object from the scene.</div></div></summary>
+<div class="fn-body">
+<div class="signature">remove_obj(tag)</div>
+<p><code>Object3D</code>supports hierarchy with <code>addChild()</code>and <code>removeChild()</code>. Recursive removal and release of resources depends on the wrapper.</p>
+</div>
+</details>
+<details class="function">
+<summary><div><div class="fn-name">has_obj(tag) / get_obj(tag)</div><div class="fn-short">Search for an object by tag.</div></div></summary>
+<div class="fn-body">
+<div class="signature">has_obj(tag) → Bool
+get_obj(tag) → Object3D</div>
+<p>These are declared signatures for hscript not lua</p>
+</div>
+</details>
+<details class="function">
+<summary><div><div class="fn-name">clear_objects() / clear_scene()</div><div class="fn-short">Clear the scene objects.</div></div></summary>
+<div class="fn-body">
+<div class="signature">clear_objects()
+clear_scene()</div>
+<p>The hierarchy <code>Object3D</code>allows you to remove children from the root. Whether tags, lights, and reflectors are cleaned up depends on the wrapper.</p>
+</div>
+</details>
+<details class="function">
+<summary><div><div class="fn-name">Mesh3D: fromArrays / computeNormals / computeTangents</div><div class="fn-short">Builds and prepares geometry.</div></div></summary>
+<div class="fn-body">
+<div class="signature">fromArrays(pos, nrm?, uv?, idx)
+computeBounds()
+computeNormals()
+computeTangents()
+upload()
+ensureUploaded()
+markDirty()
+draw()
+dispose()
+splitLarge()</div>
+<p><code>pos</code>Contains flattened XYZ coordinates. Normals, UVs, RGBA colors, and tangents are optional. During upload, implementation-predicted missing data is computed; missing UVs are set to zero, and missing vertex colors are set to white.</p>
+<p>The interleaved buffer uses 16 floats per vertex: position 3, normal 3, UV 2, color 4, and tangent 4. The indices are 16-bit: for meshes beyond the useful limit of about 65,000 vertices, use <code>splitLarge()</code>. After runtime changes to positions or indices, call <code>markDirty()</code>.</p>
+</div>
+</details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="transforms">
+<div class="category-head"><div class="category-icon">↗</div><div><h2>3D Transformations</h2><p>Position, rotation, scale, hierarchy and movement of objects.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">set_obj_position(tag, x, y, z)</div><div class="fn-short">Set local location.</div></div></summary><div class="fn-body"><div class="signature">set_obj_position(tag, x, y, z)</div><p><code>Object3D.position</code>represents the local position. The global position is calculated by updating the hierarchy matrix.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">move_obj(tag, dx, dy, dz)</div><div class="fn-short">Moves the object by an offset.</div></div></summary><div class="fn-body"><div class="signature">move_obj(tag, dx, dy, dz)</div><p>The callback can add the offset to the current local position.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_rotation(tag, rx, ry, rz)</div><div class="fn-short">Set the rotation in degrees.</div></div></summary><div class="fn-body"><div class="signature">set_obj_rotation(tag, rx, ry, rz)</div><p><strong>Object3D rotations are expressed in degrees.</strong> Internal composition applies the X, then Y, then Z axes. Wrapper conversion must maintain the same convention.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">rotate_obj(tag, dx, dy, dz)</div><div class="fn-short">Apply an incremental rotation.</div></div></summary><div class="fn-body"><div class="signature">rotate_obj(tag, dx, dy, dz)</div><p>If implemented as an offset of <code>Object3D.rotation</code>, the values ​​are degree increments.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_scale(tag, sx, sy, sz)</div><div class="fn-short">Set the scale per axis.</div></div></summary><div class="fn-body"><div class="signature">set_obj_scale(tag, sx, sy, sz)</div><p>The default local scale of <code>Object3D</code>is <code>(1, 1, 1)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_scale_uniform(tag, s)</div><div class="fn-short">Sets the same scale on all axes.</div></div></summary><div class="fn-body"><div class="signature">set_obj_scale_uniform(tag, s)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_visible(tag, v)</div><div class="fn-short">Set visibility.</div></div></summary><div class="fn-body"><div class="signature">set_obj_visible(tag, v)</div><p><code>Object3D.visible</code>is initially <code>true</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_cast_shadow(tag, v) / set_obj_receive_shadow(tag, v)</div><div class="fn-short">Sets the object's shadows.</div></div></summary><div class="fn-body"><div class="signature">set_obj_cast_shadow(tag, v)
+set_obj_receive_shadow(tag, v)</div><p><code>castShadow</code>, <code>receiveShadow</code>and <code>frustumCull</code>are properties of <code>Object3D</code>, all of which are initially active. Recursive application to children depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_spin(tag, dx, dy, dz)</div><div class="fn-short">Set auto-rotation.</div></div></summary><div class="fn-body"><div class="signature">set_obj_spin(tag, dx, dy, dz)</div><p><code>Object3D.spin</code>It is expressed in degrees per second and is integrated during <code>update(dt)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_velocity(tag, vx, vy, vz)</div><div class="fn-short">Sets the speed of the object.</div></div></summary><div class="fn-body"><div class="signature">set_obj_velocity(tag, vx, vy, vz)</div><p><code>Object3D.velocity</code>it is integrated over time as displacement per second.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_parent(tag, parentTag)</div><div class="fn-short">Assign a parent in the hierarchy.</div></div></summary><div class="fn-body"><div class="signature">set_obj_parent(tag, parentTag = null)</div><p><code>addChild()</code>Removes the child from the previous parent before adding it to the new one. Handling an empty parent or the root is the wrapper's responsibility.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">get_obj_position(tag)</div><div class="fn-short">Reads the local or world location according to the wrapper.</div></div></summary><div class="fn-body"><div class="signature">get_obj_position(tag) → [x, y, z]</div><p><code>Object3D.position</code>It's local. For the world position, <code>worldPosition</code>it reads the translation from the updated world array. Check which of the two returns the Lua callback.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="materials">
+<div class="category-head"><div class="category-icon">◈</div><div><h2>Materials, textures and shaders</h2><p>PBR properties, textures, uniforms and custom shaders.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">set_obj_material(tag, materialName)</div><div class="fn-short">Assign a material to an object.</div></div></summary><div class="fn-body"><div class="signature">set_obj_material(tag, materialName)</div><p><code>Object3D</code>exposes the reference to the material. Assignment by name and application to children depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_color(tag, r, g, b, a)</div><div class="fn-short">Sets the base color of the material.</div></div></summary><div class="fn-body"><div class="signature">set_obj_color(tag, r, g, b, a = 1)</div><p>The color channels <code>Material3D</code>are normalized to the range 0–1. If <code>a &lt; 1</code>the material is opaque without an alpha test, <code>setColor()</code>alpha blending is automatically enabled.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_opacity(tag, a)</div><div class="fn-short">Set the opacity.</div></div></summary><div class="fn-body"><div class="signature">set_obj_opacity(tag, a)</div><p>The logic for copying material and managing blending depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_obj_texture(tag, slot, path)</div><div class="fn-short">Assign a texture to a slot.</div></div></summary><div class="fn-body"><div class="signature">set_obj_texture(tag, slot, path)</div><p>The internal slots of <code>Material3D</code>are <code>albedoTex</code>, <code>normalTex</code>, <code>ormTex</code>and <code>emissiveTex</code>. Lua aliases and path loading are defined by the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">create_material(name, preset)</div><div class="fn-short">Create a named material.</div></div></summary><div class="fn-body"><div class="signature">create_material(name, preset = null)</div><p>Internal presets include <code>metal</code>, <code>gold</code>, <code>mirror</code>, <code>glass</code>, <code>emissive</code>, <code>unlitColor</code>, <code>water(planeTag)</code>and <code>fromName</code>. The names accepted by the wrapper may be different.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">get_material(name)</div><div class="fn-short">Retrieve a named material.</div></div></summary><div class="fn-body"><div class="signature">get_material(name)</div><p>The direct availability of <code>Material3D</code>in Lua depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_color(name, r, g, b, a)</div><div class="fn-short">Set the base color.</div></div></summary><div class="fn-body"><div class="signature">set_material_color(name, r, g, b, a = 1)</div><p>RGB and alpha are normalized values. The internal implementation also offers <code>setColorHex(rgb, a)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_metallic(name, v) / set_material_roughness(name, v)</div><div class="fn-short">Adjust PBR properties.</div></div></summary><div class="fn-body"><div class="signature">set_material_metallic(name, v)
+set_material_roughness(name, v)</div><p>The material uses a metallic/roughness PBR model. The default values ​​are <code>metallic = 0</code>and <code>roughness = 0.6</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_emissive(name, r, g, b, intensity)</div><div class="fn-short">Set color and emission intensity.</div></div></summary><div class="fn-body"><div class="signature">set_material_emissive(name, r, g, b, intensity = 1)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_texture(name, slot, path)</div><div class="fn-short">Assign a texture to the material.</div></div></summary><div class="fn-body"><div class="signature">set_material_texture(name, slot, path)</div><p>Support for different slots is implemented by the material. Alias ​​names and path resolution depend on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_blend(name, mode)</div><div class="fn-short">Set the blending mode.</div></div></summary><div class="fn-body"><div class="signature">set_material_blend(name, mode)</div><p>The internal constants are <code>OPAQUE = 0</code>, <code>ALPHA = 1</code>, <code>ADD = 2</code>and <code>PREMULT = 3</code>. Strings recognized by the Lua callback must be matched in the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_double_sided(name, v) / set_material_unlit(name, v)</div><div class="fn-short">Set up faces and lighting.</div></div></summary><div class="fn-body"><div class="signature">set_material_double_sided(name, v)
+set_material_unlit(name, v)</div><p><code>doubleSided</code>and <code>unlit</code>they are properties of the material.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_alpha_test(name, v, cutoff)</div><div class="fn-short">Set up alpha cutting.</div></div></summary><div class="fn-body"><div class="signature">set_material_alpha_test(name, v, cutoff = 0.5)</div><p>The default value <code>alphaCutoff</code>is 0.5.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_vertex_colors(name, v)</div><div class="fn-short">Enable vertex colors.</div></div></summary><div class="fn-body"><div class="signature">set_material_vertex_colors(name, v)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_uv_scale / set_material_uv_offset / set_material_uv_scroll</div><div class="fn-short">Set up UV transformation.</div></div></summary><div class="fn-body"><div class="signature">set_material_uv_scale(name, x, y)
+set_material_uv_offset(name, x, y)
+set_material_uv_scroll(name, x, y)</div><p>Default values: scale <code>(1, 1)</code>, offset <code>(0, 0)</code>, and scroll <code>(0, 0)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_env_intensity(name, v) / set_material_normal_scale(name, v)</div><div class="fn-short">Adjusts the ambient and intensity of the normals.</div></div></summary><div class="fn-body"><div class="signature">set_material_env_intensity(name, v)
+set_material_normal_scale(name, v)</div><p>Both have a default value of 1.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_reflection_plane(name, planeTag, strength, distortion)</div><div class="fn-short">Connect a reflection plan.</div></div></summary><div class="fn-body"><div class="signature">set_material_reflection_plane(name, planeTag = null, strength = 0.8, distortion = 0.03)</div><p>The material supports the reflective plane tag, reflection strength, and distortion. Callback connection depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_hooks(name, vertexHook, fragmentHook)</div><div class="fn-short">Configure custom GLSL hooks.</div></div></summary><div class="fn-body"><div class="signature">set_material_hooks(name, vertexHook = null, fragmentHook = null)</div><p>The expected GLSL signatures are:</p><div class="signature">vec3 hookVertex(vec3 p, vec3 n, vec2 uv, float t)
+void hookFragment(inout vec3 albedo, inout float alpha, inout vec3 emissive, inout float rough, inout float metallic, inout vec3 N, vec2 uv, vec3 worldPos, float t)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_shader(name, vertexSrc, fragmentSrc)</div><div class="fn-short">Replaces the default shaders.</div></div></summary><div class="fn-body"><div class="signature">set_material_shader(name, vertexSrc = null, fragmentSrc = null)</div><p>The attributes supported by <code>Shader3D</code>are <code>aPosition</code>, <code>aNormal</code>, <code>aUV</code>, <code>aColor</code>and <code>aTangent</code>. The shader language is geared towards GLSL 1.10 / GLSL ES 1.00 compatibility.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_uniform(name, uniform, a, b, c, d)</div><div class="fn-short">Set a numeric uniform.</div></div></summary><div class="fn-body"><div class="signature">set_material_uniform(name, uniform, a, b?, c?, d?)</div><p><code>Material3D.setUniform</code>supports numeric arrays of one to four values.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_material_uniform_texture(name, uniform, path)</div><div class="fn-short">Assign a texture to a custom sampler.</div></div></summary><div class="fn-body"><div class="signature">set_material_uniform_texture(name, uniform, path)</div><p>Custom sampler slots start at texture unit 7. Loading and naming are wrapper dependent.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">Texture3D: fromFile / fromColor / createDynamic</div><div class="fn-short">Create textures from files, color, or dynamic bitmaps.</div></div></summary><div class="fn-body"><div class="signature">fromFile(path, repeat = true, mipmaps = true)
+fromColor(r, g, b, a = 255)
+createDynamic(smooth = true)
+update(bitmap) → Bool
+setFilter(smooth)
+bind(unit)
+dispose()</div><p>Bitmap textures use RGBA. Repeat and mipmap are only applied when the dimensions meet the power-of-two requirements. Cubemap textures use six faces in order <code>+X, -X, +Y, -Y, +Z, -Z</code>.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="lights">
+<div class="category-head"><div class="category-icon">☼</div><div><h2>Lights</h2><p>Types of light, direction, color, intensity and shadows.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">add_light(tag, type, x, y, z)</div><div class="fn-short">Create or record a light.</div></div></summary><div class="fn-body"><div class="signature">add_light(tag, type = "directional", x = 0, y = 5, z = 0)</div><p><code>Light3D</code>defines three types: <code>DIRECTIONAL = 1</code>, <code>POINT = 2</code>and <code>SPOT = 3</code>. The internal conversion accepts <code>point</code>and <code>omni</code>as a point light, <code>spot</code>as a spotlight, and uses directional for the other values. The default position of the class is <code>(0, 5, 0)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">remove_light(tag)</div><div class="fn-short">Removes a light from the scene.</div></div></summary><div class="fn-body"><div class="signature">remove_light(tag)</div><p>Light log management depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_position(tag, x, y, z)</div><div class="fn-short">Set the location.</div></div></summary><div class="fn-body"><div class="signature">set_light_position(tag, x, y, z)</div><p>The internal starting position is <code>(0, 5, 0)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_direction(tag, x, y, z)</div><div class="fn-short">Sets the direction vector.</div></div></summary><div class="fn-body"><div class="signature">set_light_direction(tag, x, y, z)</div><p>The default direction is <code>(-0.4, -1, -0.3)</code>. Whether or not it synchronizes with the solar direction depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_target(tag, x, y, z)</div><div class="fn-short">Shine a light at a point.</div></div></summary><div class="fn-body"><div class="signature">set_light_target(tag, x, y, z)</div><p>This callback is not defined by <code>Light3D</code>itself;</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_color(tag, r, g, b)</div><div class="fn-short">Set the color of the light.</div></div></summary><div class="fn-body"><div class="signature">set_light_color(tag, r, g, b)</div><p>The initial color is white <code>(1, 1, 1)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_intensity(tag, v)</div><div class="fn-short">Set the intensity.</div></div></summary><div class="fn-body"><div class="signature">set_light_intensity(tag, v)</div><p>The default intensity is 1.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_range(tag, v)</div><div class="fn-short">Set the light radius.</div></div></summary><div class="fn-body"><div class="signature">set_light_range(tag, v)</div><p>The initial value of <code>range</code>is 30.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_spot_angles(tag, inner, outer)</div><div class="fn-short">Set the spotlight angles.</div></div></summary><div class="fn-body"><div class="signature">set_light_spot_angles(tag, inner, outer)</div><p>The default internal angles are 20° and 30°. These are relevant to the spot type.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_light_cast_shadow(tag, v) / set_light_enabled(tag, v)</div><div class="fn-short">Check shadows and activation.</div></div></summary><div class="fn-body"><div class="signature">set_light_cast_shadow(tag, v)
+set_light_enabled(tag, v)</div><p><code>enabled</code>It is initially true and <code>castShadow</code>false. Only directional and spot lights can cast shadows; the renderer handles only one shadow-casting light at a time.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="camera">
+<div class="category-head"><div class="category-icon">◎</div><div><h2>Camera</h2><p>Position, orientation, perspective and orthographic projection.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">set_camera_position(x, y, z)</div><div class="fn-short">Set the camera position.</div></div></summary><div class="fn-body"><div class="signature">set_camera_position(x, y, z)</div><p>The starting position is <code>(0, 2, 6)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">move_camera(dx, dy, dz)</div><div class="fn-short">Move the room.</div></div></summary><div class="fn-body"><div class="signature">move_camera(dx, dy, dz)</div><p>The translation of the target along with the camera is a choice of the wrapper, not a behavior guaranteed by the class alone.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_target(x, y, z)</div><div class="fn-short">Set the observed point.</div></div></summary><div class="fn-body"><div class="signature">set_camera_target(x, y, z)</div><p>Activates target mode. In this mode, the forward direction is the normalized vector from <code>position</code>a <code>target</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_rotation(pitch, yaw, roll)</div><div class="fn-short">Set the camera angles in degrees.</div></div></summary><div class="fn-body"><div class="signature">set_camera_rotation(pitch, yaw, roll = 0)</div><p><code>pitch</code>, <code>yaw</code>and <code>roll</code>are in degrees. Rotation-based mode calculates direction from yaw and pitch. With yaw equal to 0, the camera looks towards the negative Z axis. The order of the callback parameters must be checked in the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_roll(roll)</div><div class="fn-short">Set the camera roll.</div></div></summary><div class="fn-body"><div class="signature">set_camera_roll(roll)</div><p>The internal value is expressed in degrees.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_fov(fov)</div><div class="fn-short">Sets the perspective field of view.</div></div></summary><div class="fn-body"><div class="signature">set_camera_fov(fov)</div><p>The initial value is 60. The unit expected by the projection method must be confirmed in the implementation of <code>Mat4.setPerspective</code>; it should not be assumed from the field alone <code>Camera3D.fov</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_clip(near, far)</div><div class="fn-short">Set clipping planes.</div></div></summary><div class="fn-body"><div class="signature">set_camera_clip(near, far)</div><p>The initial values ​​are <code>near = 0.1</code>and <code>far = 500</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_orbit(cx, cy, cz, distance, yaw, pitch)</div><div class="fn-short">Orbit around a point.</div></div></summary><div class="fn-body"><div class="signature">set_camera_orbit(cx, cy, cz, distance, yaw, pitch)</div><p><code>Camera3D.orbit()</code>use yaw and pitch in degrees, position the camera around the center and set that center as the target.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_camera_ortho(enabled, size)</div><div class="fn-short">Turn on orthographic projection.</div></div></summary><div class="fn-body"><div class="signature">set_camera_ortho(enabled, size = 10)</div><p>In orthographic projection, <code>orthoSize</code>it is the semi-height of the view; the semi-width is <code>orthoSize × aspect</code>. The initial value is 10.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">camera_look_at_obj(tag)</div><div class="fn-short">Point the camera at an object.</div></div></summary><div class="fn-body"><div class="signature">camera_look_at_obj(tag)</div><p>The class supports an explicit target. Finding the object and using its global location is the wrapper's responsibility.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="sky">
+<div class="category-head"><div class="category-icon">☁</div><div><h2>Sky and atmosphere</h2><p>Procedural sky, cubemap, simulated time, sun, clouds and stars.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">set_sky_mode(mode)</div><div class="fn-short">Select sky mode.</div></div></summary><div class="fn-body"><div class="signature">set_sky_mode(mode)</div><p>The internal modes are <code>MODE_NONE = 0</code>, <code>MODE_PROCEDURAL = 1</code>and <code>MODE_CUBEMAP = 2</code>. The accepted text aliases depend on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_time(hours) / set_sky_time_speed(hoursPerSecond)</div><div class="fn-short">Set the time and time speed.</div></div></summary><div class="fn-body"><div class="signature">set_sky_time(hours)
+set_sky_time_speed(hoursPerSecond)</div><p>The simulated time is maintained in the range 0–24 with rewind. The initial value is 14 and <code>timeSpeed</code>indicates the simulated hours per real second.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_auto_palette(v)</div><div class="fn-short">Turn the auto palette on or off.</div></div></summary><div class="fn-body"><div class="signature">set_sky_auto_palette(v)</div><p>When <code>autoPalette</code>enabled, the palette is calculated based on the simulated time.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_colors(zr, zg, zb, hr, hg, hb, gr, gg, gb)</div><div class="fn-short">Sets the colors of the zenith, horizon and ground.</div></div></summary><div class="fn-body"><div class="signature">set_sky_colors(zr, zg, zb, hr, hg, hb, gr = 0.2, gg = 0.2, gb = 0.22)</div><p>The internal defaults are zenith <code>(0.10, 0.25, 0.60)</code>, horizon <code>(0.55, 0.70, 0.90)</code>, and terrain <code>(0.22, 0.24, 0.27)</code>. The callback must disable the automatic palette if you want to keep manual colors.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_sun_direction(x, y, z)</div><div class="fn-short">Set the direction of the sun.</div></div></summary><div class="fn-body"><div class="signature">set_sky_sun_direction(x, y, z)</div><p><code>sunDir</code>It is a normalized vector. The initial value comes from <code>(0.4, 0.8, -0.3)</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_sun(sizeDeg, intensity, r, g, b)</div><div class="fn-short">Configure the size, intensity and color of the sun.</div></div></summary><div class="fn-body"><div class="signature">set_sky_sun(sizeDeg, intensity, r = 1, g = 0.95, b = 0.85)</div><p>The initial value of <code>sunSize</code>is 1.4 degrees, that of <code>sunIntensity</code>is 4, and the color is <code>(1, 0.95, 0.85)</code>. Synchronization with the main light depends on the connection <code>linkSun</code>and the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_link_sun(v)</div><div class="fn-short">Connect or disconnect the sun to the light.</div></div></summary><div class="fn-body"><div class="signature">set_sky_link_sun(v)</div><p><code>linkSun</code>It is active by default. The direction returned for the light is <code>sunDir</code>if the Y component is non-negative, otherwise its opposite.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_clouds(enabled, coverage, density, speed, softness)</div><div class="fn-short">Configure procedural clouds.</div></div></summary><div class="fn-body"><div class="signature">set_sky_clouds(enabled, coverage = 0.5, density = 0.95, speed = 1, softness = 0.35)</div><p>Clouds are enabled by default. The internal defaults are coverage 0.5, density 0.95, speed 1, and softness 0.35.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_cloud_color(r, g, b)</div><div class="fn-short">Sets the color of the clouds.</div></div></summary><div class="fn-body"><div class="signature">set_sky_cloud_color(r, g, b)</div><p>The initial color of the clouds is white. The automatic palette can recalculate the actual color.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_stars(v)</div><div class="fn-short">Enable or disable stars.</div></div></summary><div class="fn-body"><div class="signature">set_sky_stars(v)</div><p>Stars are enabled by default.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sky_cubemap(paths)</div><div class="fn-short">Sets the six faces of a cubemap.</div></div></summary><div class="fn-body"><div class="signature">set_sky_cubemap(paths)</div><p>The six faces are sorted <code>+X, -X, +Y, -Y, +Z, -Z</code>. <code>Texture3D.fromCubeFiles()</code>receives a list of six paths; the selection of cubemap mode depends on the wrapper.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="render">
+<div class="category-head"><div class="category-icon">▦</div><div><h2>Rendering, fog e ombre</h2><p>Graphics state, lighting, and global renderer parameters.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">set_fog(type, r, g, b, a, c)</div><div class="fn-short">Set up fog.</div></div></summary><div class="fn-body"><div class="signature">set_fog(type, r = 0.6, g = 0.7, b = 0.8, a = 20, c = 120)</div><p>The shader system includes fog support, but the callback signature and exact interpretation of the parameters must be confirmed in the wrapper and shader used by the renderer.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_fog_from_sky(v)</div><div class="fn-short">Match the color of the fog to the sky.</div></div></summary><div class="fn-body"><div class="signature">set_fog_from_sky(v)</div><p>The synchronization between sky and fog is not defined by the base classes listed.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_shadows(v)</div><div class="fn-short">Enable or disable global shadows.</div></div></summary><div class="fn-body"><div class="signature">set_shadows(v)</div><p>Object and light shadow properties are available internally; the global toggle is renderer-specific.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_shadow_quality(size)</div><div class="fn-short">Configures the shadow map resolution.</div></div></summary><div class="fn-body"><div class="signature">set_shadow_quality(size)</div><p>Range, rounding, and resolution limits must be checked in the renderer code.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_shadow_distance(d) / set_shadow_bias(b)</div><div class="fn-short">Adjust shadow distance and bias.</div></div></summary><div class="fn-body"><div class="signature">set_shadow_distance(d)
+set_shadow_bias(b)</div><p>Renderer-specific parameters, not public methods of classes <code>Object3D</code>or <code>Light3D</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_shadow_strength(s) / set_shadow_softness(s)</div><div class="fn-short">Adjusts the intensity and softness of shadows.</div></div></summary><div class="fn-body"><div class="signature">set_shadow_strength(s)
+set_shadow_softness(s)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_ambient(r, g, b, intensity)</div><div class="fn-short">Set the ambient lighting.</div></div></summary><div class="fn-body"><div class="signature">set_ambient(r, g, b, intensity = 1)</div><p>The renderer handles the global environment. Material colors are normalized to the range 0–1.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_background(r, g, b, transparent)</div><div class="fn-short">Sets the renderer background.</div></div></summary><div class="fn-body"><div class="signature">set_background(r, g, b, transparent = false)</div><p>The signature is specific to the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_exposure(v) / set_tone_mapping(v)</div><div class="fn-short">Adjust exposure and tone mapping.</div></div></summary><div class="fn-body"><div class="signature">set_exposure(v)
+set_tone_mapping(v)</div><p>Check the callbacks actually registered in the renderer.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_render_scale(v)</div><div class="fn-short">Sets the rendering scale.</div></div></summary><div class="fn-body"><div class="signature">set_render_scale(v)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_swap_red_blue(mode)</div><div class="fn-short">Configure red and blue channel swapping.</div></div></summary><div class="fn-body"><div class="signature">set_swap_red_blue(mode)</div><p>The values <code>-1</code>​​, <code>0</code>and <code>1</code>are wrapper conventions and are not defined by the base Haxe classes documented here.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_render_every(n)</div><div class="fn-short">Configure the rendering frequency.</div></div></summary><div class="fn-body"><div class="signature">set_render_every(n)</div><p>The minimum allowed value must be checked in the renderer implementation.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">RenderTarget: new / bind / resize / dispose</div><div class="fn-short">Manages an RGBA8 framebuffer.</div></div></summary><div class="fn-body"><div class="signature">new(w, h, depth = true, linear = true)
+bind()
+resize(w, h)
+dispose()</div><p><code>RenderTarget</code>Creates an RGBA8 texture associated with a framebuffer, with an optional depth buffer. Linear filtering is enabled by default. <code>bind()</code>Sets the framebuffer and viewport.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="post">
+<div class="category-head"><div class="category-icon">✳</div><div><h2>Post-processing</h2><p>Effects applied to the final image.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">set_post_grade(brightness, contrast, saturation)</div><div class="fn-short">Adjust color correction.</div></div></summary><div class="fn-body"><div class="signature">set_post_grade(brightness, contrast, saturation)</div><p>The callback signature is wrapper-specific; check the default values ​​and range accepted by the renderer.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_post_vignette(strength, softness)</div><div class="fn-short">Set up vignetting.</div></div></summary><div class="fn-body"><div class="signature">set_post_vignette(strength, softness = 0.5)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_post_tint(r, g, b)</div><div class="fn-short">Apply a global tint.</div></div></summary><div class="fn-body"><div class="signature">set_post_tint(r, g, b)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_post_grain(v) / set_post_chroma(v)</div><div class="fn-short">Configure grain and chromatic aberration.</div></div></summary><div class="fn-body"><div class="signature">set_post_grain(v)
+set_post_chroma(v)</div></div></details>
+<details class="function"><summary><div><div class="fn-name">set_post_hook(glsl)</div><div class="fn-short">Sets a GLSL post-processing hook.</div></div></summary><div class="fn-body"><div class="signature">set_post_hook(glsl = null)</div><p>The callback and its handling must be verified in the wrapper. Don't confuse this hook with <code>Material3D.vertexHook</code>and <code>Material3D.fragmentHook</code>, which belong to material shaders.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="reflections">
+<div class="category-head"><div class="category-icon">≈</div><div><h2>Reflections and water</h2><p>Reflective planes and material properties for water surfaces.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">add_reflection_plane(tag, px, py, pz, nx, ny, nz, resolutionScale)</div><div class="fn-short">Create a reflective plane.</div></div></summary><div class="fn-body"><div class="signature">add_reflection_plane(tag, px = 0, py = 0, pz = 0, nx = 0, ny = 1, nz = 0, resolutionScale = 0.5)</div><p><code>ReflectionPlane</code>uses an initial point <code>(0, 0, 0)</code>, a normal <code>(0, 1, 0)</code>, <code>resolutionScale = 0.5</code>, <code>enabled = true</code>and <code>clipBias = 0.05</code>. The method <code>planeD()</code>calculates the plane term from the normalized normal and the point.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">remove_reflection_plane(tag)</div><div class="fn-short">Removes a reflective plane.</div></div></summary><div class="fn-body"><div class="signature">remove_reflection_plane(tag)</div><p><code>ReflectionPlane.dispose()</code>Releases the associated render target. Removal from the registry depends on the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_reflection_plane(tag, px, py, pz, nx, ny, nz)</div><div class="fn-short">Update point and normal of the plane.</div></div></summary><div class="fn-body"><div class="signature">set_reflection_plane(tag, px, py, pz, nx, ny, nz)</div><p>The plan is defined by a point and a normal. Normalization and callback updates depend on the actual implementation.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">add_water(tag, y, sizeX, sizeZ, segments)</div><div class="fn-short">Helper wrapper for a water surface.</div></div></summary><div class="fn-body"><div class="signature">add_water(tag, y = 0, sizeX = 100, sizeZ = 100, segments = 96)</div><p><code>Material3D.water(planeTag)</code>configures the shader hooks and uniform <code>uWaveAmp = 0.12</code>, <code>uWaveFreq = 0.9</code>, <code>uWaveSpeed = 1.4</code>and <code>uWaterColor = [0.04, 0.22, 0.32]</code>, as well as <code>planarStrength = 0.85</code>. The complete creation of the water object and its reflecting plane is a wrapper function.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="bindings">
+<div class="category-head"><div class="category-icon">▧</div><div><h2>Sprite binding</h2><p>Dynamic textures and mapping 2D sprites to 3D materials.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">bind_sprite_to_material(materialName, sprite, slot, smooth, transparent)</div><div class="fn-short">Links a sprite to a material slot.</div></div></summary><div class="fn-body"><div class="signature">bind_sprite_to_material(materialName, sprite, slot = "albedo", smooth = true, transparent = true)</div><p>This callback is wrapper-specific. <code>Texture3D.createDynamic()</code>It creates an updatable texture and <code>update(bitmap)</code>returns a Boolean. Blending, transparency, and sprite updating effects depend on the binding code.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">bind_sprite_to_obj(tag, sprite, slot, smooth, transparent, unlit)</div><div class="fn-short">Link a sprite to an object.</div></div></summary><div class="fn-body"><div class="signature">bind_sprite_to_obj(tag, sprite, slot = "albedo", smooth = true, transparent = true, unlit = false)</div><p>The callback can apply the material to the children of the hierarchy. The use of private materials and transparency management must be confirmed in the wrapper.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">unbind_sprite(sprite)</div><div class="fn-short">Removes a sprite binding.</div></div></summary><div class="fn-body"><div class="signature">unbind_sprite(sprite)</div><p>Removing the binding and releasing the dynamic texture is the wrapper's responsibility.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">set_sprite_binding_always(sprite, v)</div><div class="fn-short">Configure binding update.</div></div></summary><div class="fn-body"><div class="signature">set_sprite_binding_always(sprite, v)</div><p>Check the wrapper to see if the option forces the texture to update on every render.</p></div></details>
+</div>
+</section>
+<section class="category" data-category="Scene3D" id="diagnostics">
+<div class="category-head"><div class="category-icon">⌁</div><div><h2>GL Diagnostics and Utilities</h2><p>Renderer statistics, shader compilation, and OpenGL status.</p></div></div>
+<div class="function-list">
+<details class="function"><summary><div><div class="fn-name">get_stats()</div><div class="fn-short">Returns synthetic renderer statistics.</div></div></summary><div class="fn-body"><div class="signature">get_stats() → String</div><p>This is a renderer-specific callback, not a method of the 15 Haxe classes listed. The string format and included statistics must be verified in the implementation.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">Shader3D: use / loc / uniform setters</div><div class="fn-short">Use a shader and set the uniforms.</div></div></summary><div class="fn-body"><div class="signature">use()
+loc(name)
+f1(name, value)
+i1(name, value)
+f2(name, x, y)
+f3(name, x, y, z)
+f4(name, x, y, z, w)
+f4v(name, values)
+mat4(name, matrix)
+mat3(name, matrix)
+dispose()</div><p><code>Shader3D</code>It exposes methods for uniform scalars, vectors, and matrices. The fixed attributes provided are <code>aPosition</code>, <code>aNormal</code>, <code>aUV</code>, <code>aColor</code>and <code>aTangent</code>.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">GLUtil: setAttribCount / resetAttribs</div><div class="fn-short">Manages active vertex attributes.</div></div></summary><div class="fn-body"><div class="signature">setAttribCount ( n ) resetAttribs ( )</div><p><code>setAttribCount(n)</code>Enables attributes 0 to 1 exactly and disables additional attributes. <code>resetAttribs()</code>Disables attributes 0 to 7. Shader compilation and linking produce logs on error.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">GLState: save / restore</div><div class="fn-short">Saves and restores part of the OpenGL state.</div></div></summary><div class="fn-body"><div class="signature">save()
+restore()</div><p>Managed state includes program, framebuffer, viewport, array buffer, and element, active texture and current 2D binding, enable depth/cull/blend/scissor, depth mask, and function, front face, and blending functions. <code>save()</code>Disables scissor. <code>restore()</code>Resets attributes and unlinks 2D textures/cubemaps on units 0–7 before restoring the saved state; the previously active 2D binding is restored.</p></div></details>
+<details class="function"><summary><div><div class="fn-name">FileIO: getBytes / getText / loadBitmap / dirOf / join</div><div class="fn-short">Upload files and manage routes.</div></div></summary><div class="fn-body"><div class="signature">getBytes(path)
+getText(path)
+loadBitmap(path)
+bitmapFromBytes(bytes)
+dirOf(path)
+join(dir, rel)</div><p>On filesystem platforms, <code>getBytes()</code>first tries an existing file that isn't a directory, then OpenFL assets. If the contents aren't found, it returns null. <code>getText()</code>Converts bytes to a string; <code>loadBitmap()</code>loads a bitmap; <code>dirOf()</code>returns the directory prefix with a trailing slash, if present. <code>join()</code>Simply concatenates the directory and relative path.</p></div></details>
+</div>
+</section>
+<div class="empty" id="empty">No features match your search.</div>
+</main>
+</div>
+<script>
+(() => {
+  const search = document.getElementById('search');
+  const functions = [...document.querySelectorAll('.function')];
+  const categories = [...document.querySelectorAll('.category')];
+  const empty = document.getElementById('empty');
+  const navLinks = [...document.querySelectorAll('#navigation a')];
+
+  function filterDocs() {
+    const q = search.value.trim().toLowerCase();
+    let total = 0;
+    functions.forEach(card => {
+      const match = !q || card.innerText.toLowerCase().includes(q);
+      card.hidden = !match;
+      if (match) total++;
+    });
+    categories.forEach(section => {
+      const visible = [...section.querySelectorAll('.function')].some(card => !card.hidden);
+      section.hidden = !visible;
+    });
+    document.getElementById('overview').hidden = !!q;
+    document.querySelector('.stats').hidden = !!q;
+    document.querySelector('.intro-note').hidden = !!q;
+    empty.style.display = total ? 'none' : 'block';
+  }
+  search.addEventListener('input', filterDocs);
+
+  document.addEventListener('click', async e => {
+    const button = e.target.closest('[data-copy]');
+    if (!button) return;
+    const target = button.closest('.example');
+    const text = target?.querySelector('pre')?.innerText || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = 'Copiato!';
+      setTimeout(() => button.textContent = 'Copia', 1200);
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+      button.textContent = 'Copiato!';
+      setTimeout(() => button.textContent = 'Copia', 1200);
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // Apri le schede corrispondenti quando si cerca una funzione.
+  search.addEventListener('input', () => {
+    if (!search.value.trim()) return;
+    functions.forEach(card => {
+      if (!card.hidden) card.open = true;
+    });
+  });
+})();
+</script>
+</body>
+</html>
