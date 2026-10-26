@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>MidNight Engine — Lua &amp; 3D API</title>
+<title>FNF NkillVerse Engine — Lua &amp; 3D API</title>
 <style>
 :root{
   --bg:#501919;--panel:#5c2626;--panel2:#6b2525;--line:#803939;--text:#e8ecf4;
@@ -322,8 +322,8 @@ footer * { color: #ffffff !important; }
 <div class="layout" lang="en">
 <aside class="sidebar">
 <div class="brand">
-<div class="brand-mark">MNE</div>
-<h1>MidNight Engine</h1>
+<div class="brand-mark">NKE</div>
+<h1>NkillVerse Engine</h1>
 </div>
 <div class="search-wrap"><span class="search-icon">⌕</span><input aria-label="Search for a function" id="search" placeholder="Search for a function…" type="search"/></div>
 <nav id="navigation">
@@ -351,7 +351,7 @@ footer * { color: #ffffff !important; }
 <main>
 <div class="topline"><span>ENGINE WIKI</span><h2>!!!still WIP soo there could be some sintax errors!!!</h2></div>
 <section class="hero" id="overview">
-<h2>MidNight Engine Functions</h2>
+<h2>NkillVerse Engine Functions</h2>
 </section>
 <section class="category" data-category="Custom Lua States" id="lua-sprites">
 <div class="category-head"><div class="category-icon">☺</div><div><h2>Sprites and animations</h2><p>Creating, adding, and managing sprites in a Custom Lua State.</p></div></div>
@@ -413,7 +413,7 @@ end</pre><button class="copy" data-copy="">Copy</button></div></div></details>
 <div class="function-list">
 <details class="function"><summary><div><div class="fn-name">trace(text)</div><div class="fn-short">Writes a message to the engine log.</div></div></summary><div class="fn-body"><div class="signature">trace(text)</div><p>The message is logged with a prefix that identifies the Lua file.</p><div class="example"><pre>trace("Custom state started")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
 <details class="function"><summary><div><div class="fn-name">switchLuaState(name)</div><div class="fn-short">Switch to a registered state.</div></div></summary><div class="fn-body"><div class="signature">switchLuaState(name)</div><p>It can switch to a known native state or to a Custom Lua State registered in <code>data/states_names.json</code>.</p><div class="example"><pre>switchLuaState("MainMenu")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
-<details class="function"><summary><div><div class="fn-name">setWindowTitle(title)</div><div class="fn-short">Change the window title.</div></div></summary><div class="fn-body"><div class="signature">setWindowTitle(title = "")</div><p>The text is stripped of leading/trailing spaces. An empty string restores the default title <code>Friday Night Funkin' MidNight Engine</code>.</p><div class="example"><pre>setWindowTitle("My Custom State")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
+<details class="function"><summary><div><div class="fn-name">setWindowTitle(title)</div><div class="fn-short">Change the window title.</div></div></summary><div class="fn-body"><div class="signature">setWindowTitle(title = "")</div><p>The text is stripped of leading/trailing spaces. An empty string restores the default title <code>Friday Night Funkin' NkillVerse Engine</code>.</p><div class="example"><pre>setWindowTitle("My Custom State")</pre><button class="copy" data-copy="">Copy</button></div></div></details>
 <details class="function"><summary><div><div class="fn-name">setProperty(path, value)</div><div class="fn-short">Sets a sprite property by path.</div></div></summary><div class="fn-body"><div class="signature">setProperty(path, value)</div><p>The first segment of the path is the sprite tag; subsequent segments identify the property via dots.</p><div class="example"><pre>setProperty("logo.alpha", 0.5)
 setProperty("logo.visible", true)</pre><button class="copy" data-copy="">Copy</button></div></div></details>
 <details class="function"><summary><div><div class="fn-name">getProperty(path)</div><div class="fn-short">Reads a property of a sprite.</div></div></summary><div class="fn-body"><div class="signature">getProperty(path)</div><p>Uses the same dot format as <code>setProperty</code>. If the path or property does not exist, returns <code>nil</code>in Lua.</p><div class="example"><pre>local alpha = getProperty("logo.alpha")
